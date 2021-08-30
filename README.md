@@ -21,10 +21,13 @@ brew install jq
 gh view-milestone
 ```
 
-```json
-{"CLOSED":3,"id":1,"title":"hoge"}
-{"OPEN":2,"id":1,"title":"hoge"}
-{"CLOSED":3,"id":2,"title":"fuga"}
+```bash
+Id | Title | OPEN | CLOSED | COMPLETE
+1 "Add HOGE" 0 3 100%
+2 "Fix SUSHI" 5 2 28%
+4 "Delete FUGA" 4 0 0%
+5 "Add FUJI" 0 3 100%
+6 "Fix MOJYA" 2 0 0%
 .
 .
 .
