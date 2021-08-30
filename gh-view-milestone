@@ -1,3 +1,43 @@
 #!/bin/bash
 set -e
-exec gh issue list --state all --json milestone,state --jq "[.[] | {id: .milestone.number, title: .milestone.title, state: .state} | select(.id != null)] | group_by(.id)[] | group_by(.state)[] | {id: .[0].id, length: length, state: .[0].state, title: .[0].title } | {id: .id, (.state): .length, title: .title}"
+
+# milestone取得
+MILESTONE=`gh issue list --state all --json milestone,state --jq '[[.[] | {id: .milestone.number, title: .milestone.title, state: .state} | select(.id != null)] | group_by(.id)[] | group_by(.state)[] | {id: .[0].id, length: length, state: .[0].state, title: .[0].title } | {id: .id, (.state): .length, title: .title}] | group_by(.id) | map(reduce .[] as \$ms ({}; . * \$ms))'`
+# milestoneの長さ
+
+MILESTONE_LENGTH=`echo $MILESTONE | jq length`
+
+nullToZero () {
+    if [ "$1" = "null" ]; then
+      echo 0
+    else
+      echo $1  
+    fi
+}
+
+getTotal () {
+    echo `expr $1 + $2`
+}
+
+getPercent () {
+    RES=`echo "scale=2; $1 / $2 * 100" | bc`
+    printf "%.0f" $RES
+}
+
+for ((i=0; i<=`expr $MILESTONE_LENGTH - 1`; i++)) do
+    Id=`echo $MILESTONE | jq .[$i].id`
+    TITLE=`echo $MILESTONE | jq .[$i].title`
+    OPEN=`echo $MILESTONE | jq .[$i].OPEN`
+    OPEN_NON_NULL=`nullToZero $OPEN`
+    CLOSED=`echo $MILESTONE | jq .[$i].CLOSED`
+    CLOSED_NON_NULL=`nullToZero $CLOSED`
+
+    TOTAL=`getTotal $OPEN_NON_NULL $CLOSED_NON_NULL`
+    PERCENT=`getPercent $CLOSED_NON_NULL $TOTAL`
+    echo $PERCENT
+    if [ "$i" = 0 ]; then
+      echo "Id | Title | OPEN | CLOSED | COMPLETE"
+    fi
+    echo $Id $TITLE $OPEN_NON_NULL $CLOSED_NON_NULL $PERCENT%
+
+done
