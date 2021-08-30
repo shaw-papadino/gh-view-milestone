@@ -20,3 +20,15 @@ brew install jq
 ```bash
 gh view-milestone
 ```
+
+```json
+{"CLOSED":3,"id":1,"title":"hoge"}
+{"OPEN":2,"id":1,"title":"hoge"}
+{"CLOSED":3,"id":2,"title":"fuga"}
+.
+.
+.
+```
+
+## Tasks
+- [] more visible
