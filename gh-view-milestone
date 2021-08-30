@@ -1,0 +1,3 @@
+#!/bin/bash
+set -e
+exec gh issue list --state all --json title --json milestone --json state --jq "[.[] | {id: .milestone.number, title: .milestone.title, state: .state} | select(.id != null)] | group_by(.id)[] | group_by(.state)[] | {id: .[0].id, length: length, state: .[0].state, title: .[0].title } | {id: .id, (.state): .length, title: .title}"
