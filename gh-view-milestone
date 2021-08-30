@@ -34,7 +34,7 @@ for ((i=0; i<=`expr $MILESTONE_LENGTH - 1`; i++)) do
 
     TOTAL=`getTotal $OPEN_NON_NULL $CLOSED_NON_NULL`
     PERCENT=`getPercent $CLOSED_NON_NULL $TOTAL`
-    echo $PERCENT
+
     if [ "$i" = 0 ]; then
       echo "Id | Title | OPEN | CLOSED | COMPLETE"
     fi
