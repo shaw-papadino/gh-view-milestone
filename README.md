@@ -31,4 +31,4 @@ gh view-milestone
 ```
 
 ## Tasks
-- [] more visible
+- [ ] more visible
